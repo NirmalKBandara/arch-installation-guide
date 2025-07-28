@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arch Linux Dual Boot with Windows 11 Guide</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+        <div class="container">
+        <header>
+            <h1>Arch Linux Dual Boot Guide</h1>
+            <p class="subtitle">Safe and easy installation alongside Windows 11</p>
+        </header>
+
+        <div class="progress-bar">
+            <div class="progress">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="step-counter" id="stepCounter">Step 1 of 14</div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn active" onclick="showOverview()">Overview</button>
+            <button class="nav-btn" onclick="showStep(1)">Start Guide</button>
+            <button class="nav-btn" onclick="showRemoval()">Removal Guide</button>
+        </div>
+
+        <div class="content">
+            <!-- Overview -->
+            <div id="overview" class="step active">
+                <h2>Installation Overview</h2>
+                
+                <div class="warning">
+                    <strong>Important:</strong> Always backup your important files before proceeding with dual boot installation.
+                </div>
+
+                <h3>What you'll need:</h3>
+                <div class="prerequisites">
+                    <div class="prereq-item">
+                        <strong>Existing System</strong><br>
+                        Windows 11 or Windows 10 installed
+                    </div>
+                    <div class="prereq-item">
+                        <strong>USB Drive</strong><br>
+                        8GB or larger capacity
+                    </div>
+                    <div class="prereq-item">
+                        <strong>Free Space</strong><br>
+                        At least 40GB available
+                    </div>
+                    <div class="prereq-item">
+                        <strong>Backup</strong><br>
+                        Important files saved externally
+                    </div>
+                </div>
+
+                <h3>Installation Steps:</h3>
+                <ol>
+                    <li>Create free space for Arch Linux</li>
+                    <li>Download and prepare installation media</li>
+                    <li>Configure BIOS settings</li>
+                    <li>Boot into Arch Linux installation</li>
+                    <li>Set up network connection</li>
+                    <li>Prepare system and install packages</li>
+                    <li>Configure storage and create partitions</li>
+                    <li>Format and mount partitions</li>
+                    <li>Run the Arch install script</li>
+                    <li>Configure installation options</li>
+                    <li>Complete post-installation setup</li>
+                    <li>Configure GRUB bootloader</li>
+                    <li>First boot and final configuration</li>
+                    <li>Add Windows to boot menu</li>
+                </ol>
+
+                <div class="info">
+                    This guide uses the official Arch install script, making the process much safer and easier than manual installation.
+                </div>
+            </div>
+
+            <!-- Step 1: Create Free Space -->
+            <div id="step1" class="step">
+                <h2>Step 1: Create Free Space for Arch Linux</h2>
+                
+                <ol>
+                    <li>Open the search bar and type <code>diskmgmt.msc</code> to access Disk Management</li>
+                    <li>You'll see all connected drives and their partitions:
+                        <ul>
+                            <li><strong>EFI partition:</strong> Contains Windows boot loader</li>
+                            <li><strong>Main Windows partition:</strong> Usually C: drive</li>
+                            <li><strong>Recovery partition:</strong> Windows recovery</li>
+                        </ul>
+                    </li>
+                    <li>Right-click on your main Windows partition (C:, D:, E:, or F:)</li>
+                    <li>Choose <strong>Shrink Volume</strong></li>
+                    <li>Allocate minimum 40GB or more (enter value in megabytes)
+                        <div class="info">Example: 200,000 megabytes = ~200GB</div>
+                    </li>
+                    <li>Click <strong>Shrink</strong> to create unallocated free space</li>
+                </ol>
+
+                <div class="completion-check">
+                    <label>
+                        <input type="checkbox" onchange="updateProgress()">
+                        I have successfully created free space for Arch Linux
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 2: Download and Prepare -->
+            <div id="step2" class="step">
+                <h2>Step 2: Download and Prepare Installation Media</h2>
+                
+                <h3>Download Arch Linux ISO:</h3>
+                <ol>
+                    <li>Go to the official Arch Linux website</li>
+                    <li>Scroll down and choose the closest mirror to your location</li>
+                    <li>Download the Arch Linux ISO</li>
+                </ol>
+
+                <h3>Create Bootable USB:</h3>
+                <ol>
+                    <li>Connect your USB stick to your computer</li>
+                    <li>Use Rufus to burn the downloaded ISO to the USB drive</li>
+                    <li>Alternatively, you can use Ventoy</li>
+                </ol>
+
+                <h3>Create System Restore Point (Recommended):</h3>
+                <ol>
+                    <li>Create a Windows system restore point before installing Arch Linux</li>
+                    <li>This allows you to restore your system if something goes wrong</li>
+                </ol>
+
+                <div class="completion-check">
+                    <label>
+                        <input type="checkbox" onchange="updateProgress()">
+                        I have downloaded Arch Linux ISO and created bootable USB
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 3: BIOS Configuration -->
+            <div id="step3" class="step">
+                <h2>Step 3: BIOS Configuration</h2>
+                
+                <ol>
+                    <li>Reboot your computer</li>
+                    <li>Enter BIOS settings during boot (usually F2, F9, or Escape key depending on motherboard)</li>
+                    <li>In UEFI BIOS settings:
+                        <ul>
+                            <li><strong>Enable USB boot</strong></li>
+                            <li><strong>Change boot order:</strong> Set USB drive as primary</li>
+                            <li><strong>Disable Secure Boot</strong> (Very important for Arch Linux boot)</li>
+                            <li><strong>Enable Microsoft 3rd party UEFI</strong> (if available)</li>
+                            <li><strong>Clear any key certificates</strong> after disabling secure boot (recommended)</li>
+                        </ul>
+                    </li>
+                    <li>Save changes and exit</li>
+                </ol>
+
+                <div class="warning">
+                    Disabling Secure Boot is crucial for Arch Linux to boot properly.
+                </div>
+
+                <div class="completion-check">
+                    <label>
+                        <input type="checkbox" onchange="updateProgress()">
+                        I have configured BIOS settings correctly
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 4: Boot Installation -->
+            <div id="step4" class="step">
+                <h2>Step 4: Boot into Arch Linux Installation Media</h2>
+                
+                <ol>
+                    <li>System will boot into Arch Linux from USB drive</li>
+                    <li>If it fails to boot, use the boot menu to load Arch install media</li>
+                    <li>You'll see a terminal expecting input</li>
+                </ol>
+
+                <div class="info">
+                    Mouse functionality is disabled - use keyboard only during installation.
+                </div>
+
+                <h3>Optional: Increase Console Size</h3>
+                <div class="code-block">setfont ter-132n</div>
+
+                <div class="completion-check">
+                    <label>
+                        <input type="checkbox" onchange="updateProgress()">
+                        I have successfully booted into Arch Linux installation
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 5: Network Connection -->
+            <div id="step5" class="step">
+                <h2>Step 5: Network Connection</h2>
+                
+                <h3>For Ethernet Connection:</h3>
+                <p>Check connection with ping command:</p>
+                <div class="code-block">ping archlinux.org</div>
+
+                <h3>For WiFi Connection:</h3>
+                <div class="code-block">iwctl</div>
+                <div class="code-block">device list</div>
+                <div class="code-block">station wlan0 get-networks</div>
+                <div class="code-block">station wlan0 connect &lt;wifi_name&gt;</div>
+                <p>Enter your WiFi password when prompted</p>
+                <div class="code-block">exit</div>
+
+                <p>After connecting, confirm internet access:</p>
+                <div class="code-block">ping archlinux.org</div>
+
+                <div class="info">
+                    To interrupt any ongoing process, use Ctrl + C
+                </div>
+
+                <div class="completion-check">
+                    <label>
+                        <input type="checkbox" onchange="updateProgress()">
+                        I have established internet connection
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 6: System Preparation -->
+            <div id="step6" class="step">
+                <h2>Step 6: System Preparation</h2>
+                
+                <p>Synchronize package databases and install required packages:</p>
+                <div class="code-block">pacman -Sy</div>
+                <div class="code-block">pacman -Sy archlinux-keyring</div>
+                <div class="code-block">pacman -Sy archinstall</div>
+
+                <h3>Check Storage Configuration:</h3>
+                <p>List all connected drives and partitions:</p>
+                <div class="code-block">lsblk</div>
+
+                <p>You'll see:</p>
+                <ul>
+                    <li><strong>nvme0n1</strong> (or similar): Main drive where Windows 11 is installed</li>
+                    <li><strong>sda:</strong> Bootable USB drive</li>
+                    <li>Ignore loop devices</li>
+                </ul>
+
+                <div class="completion-check">
+                    <label>
+                        <input type="checkbox" onchange="updateProgress()">
+                        I have prepared the system and checked storage
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 7: Create Partitions -->
+            <div id="step7" class="step">
+                <h2>Step 7: Create Partitions for Arch Linux</h2>
+                
+                <p>Use cfdisk to create partitions in the free space:</p>
+                <div class="code-block">cfdisk /dev/nvme0n1</div>
+
+                <ol>
+                    <li>Navigate using arrow keys, select with Enter</li>
+                    <li>Select the free space created earlier</li>
+                    <li>Create <strong>EFI partition:</strong>
+                        <ul>
+                            <li>Size: 1GB</li>
+                            <li>Type: EFI System</li>
+                        </ul>
+                    </li>
+                    <li>Create <strong>Root partition:</strong>
+                        <ul>
+                            <li>Size: Remaining free space (minimum 20GB)</li>
+                            <li>Type: Linux filesystem (automatically selected)</li>
+                        </ul>
+                    </li>
+                    <li>Write changes to disk</li>
+                    <li>Exit cfdisk</li>
+                </ol>
+
+                <p>Verify new partitions:</p>
+                <div class="code-block">lsblk</div>
+
+                <div class="info">
+                    Note the partition identifiers (e.g., nvme0n1p5 for EFI, nvme0n1p6 for root)
+                </div>
+
+                <div class="completion-check">
+                    <label>
+                        <input type="checkbox" onchange="updateProgress()">
+                        I have created EFI and root partitions
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 8: Format Partitions -->
+            <div id="step8" class="step">
+                <h2>Step 8: Format Partitions</h2>
+                
+                <p>Format the EFI partition (replace with your partition identifier):</p>
+                <div class="code-block">mkfs.fat -F32 /dev/nvme0n1p5</div>
+
+                <p>Format the root partition:</p>
+                <div class="code-block">mkfs.ext4 /dev/nvme0n1p6</div>
+
+                <div class="warning">
+                    Make sure you're formatting the correct partitions! Double-check with lsblk command.
+                </div>
+
+                <div class="completion-check">
+                    <label>
+                        <input type="checkbox" onchange="updateProgress()">
+                        I have formatted both partitions correctly
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 9: Mount Partitions -->
+            <div id="step9" class="step">
+                <h2>Step 9: Mount Partitions</h2>
+                
+                <p>Mount the root partition:</p>
+                <div class="code-block">mount /dev/nvme0n1p6 /mnt</div>
+
+                <p>Create boot directory and mount EFI partition:</p>
+                <div class="code-block">mkdir /mnt/boot</div>
+                <div class="code-block">mount /dev/nvme0n1p5 /mnt/boot</div>
+
+                <p>Verify all partitions are mounted:</p>
+                <div class="code-block">lsblk</div>
+
+                <div class="completion-check">
+                    <label>
+                        <input type="checkbox" onchange="updateProgress()">
+                        I have mounted all partitions correctly
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 10: Run Install Script -->
+            <div id="step10" class="step">
+                <h2>Step 10: Run Arch Install Script</h2>
+                
+                <p>Start the automated installation:</p>
+                <div class="code-block">archinstall</div>
+
+                <h3>Configuration Options:</h3>
+                <ol>
+                    <li><strong>System Language:</strong> Select your preferred language</li>
+                    <li><strong>Locale:</strong> Choose appropriate locale</li>
+                    <li><strong>Disk Configuration:</strong>
+                        <ul>
+                            <li>Choose "Pre-mounted configuration"</li>
+                            <li>Set root directory to <code>/mnt</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Boot Loader:</strong> Choose GRUB</li>
+                    <li><strong>Swap:</strong> Leave as true</li>
+                    <li><strong>Hostname:</strong> Leave as "Arch Linux" or customize</li>
+                    <li><strong>Root Password:</strong> Set secure password</li>
+                    <li><strong>User Account:</strong> Create new user and add to sudo group</li>
+                    <li><strong>Profile:</strong> Select "Desktop"</li>
+                    <li><strong>Desktop Environment:</strong> Choose your preferred DE (KDE Plasma recommended)</li>
+                </ol>
+
+                <div class="completion-check">
+                    <label>
+                        <input type="checkbox" onchange="updateProgress()">
+                        I have configured the installation options
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 11: Graphics and Audio -->
+            <div id="step11" class="step">
+                <h2>Step 11: Complete Installation Configuration</h2>
+                
+                <h3>Remaining Configuration Options:</h3>
+                <ol start="11">
+                    <li><strong>Graphics Drivers:</strong>
+                        <ul>
+                            <li>Intel iGPU: Intel open source</li>
+                            <li>AMD GPU: AMD drivers</li>
+                            <li>NVIDIA: Proprietary NVIDIA drivers</li>
+                            <li>Or "No driver" if unsure</li>
+                        </ul>
+                    </li>
+                    <li><strong>Audio:</strong> Choose PipeWire (recommended)</li>
+                    <li><strong>Kernels:</strong> Stick to default</li>
+                    <li><strong>Additional Packages:</strong> Add any tools you need (space-separated)</li>
+                    <li><strong>Network Configuration:</strong> Use NetworkManager</li>
+                    <li><strong>Time Zone:</strong> Select your time zone</li>
+                    <li><strong>Optional Repositories:</strong> Skip for stability</li>
+                </ol>
+
+                <h3>Installation Process:</h3>
+                <ol>
+                    <li>Review all options</li>
+                    <li>Select "Install" and press Enter</li>
+                    <li>Wait for installation to complete</li>
+                </ol>
+
+                <div class="info">
+                    The installation process may take 15-30 minutes depending on your internet speed and system.
+                </div>
+
+                <div class="completion-check">
+                    <label>
+                        <input type="checkbox" onchange="updateProgress()">
+                        Installation has completed successfully
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 12: Post-Installation -->
+            <div id="step12" class="step">
+                <h2>Step 12: Post-Installation Configuration</h2>
+                
+                <p>When installation completes:</p>
+                <ol>
+                    <li>Select "Yes" to enter chroot environment</li>
+                    <li>Install GRUB boot loader manually (if needed):
+                        <div class="code-block">pacman -S grub efibootmgr</div>
+                        <div class="code-block">grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB</div>
+                        <div class="code-block">grub-mkconfig -o /boot/grub/grub.cfg</div>
+                    </li>
+                    <li>Exit chroot environment:
+                        <div class="code-block">exit</div>
+                    </li>
+                    <li>Shutdown system:
+                        <div class="code-block">shutdown now</div>
+                    </li>
+                    <li>Remove USB drive</li>
+                </ol>
+
+                <div class="completion-check">
+                    <label>
+                        <input type="checkbox" onchange="updateProgress()">
+                        I have completed post-installation steps
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 13: First Boot -->
+            <div id="step13" class="step">
+                <h2>Step 13: First Boot and Configuration</h2>
+                
+                <ol>
+                    <li>System will restart and show GRUB menu</li>
+                    <li>Boot into Arch Linux</li>
+                    <li>Choose X11 or Wayland session from login manager</li>
+                </ol>
+
+                <h3>Fix Discover App Backend:</h3>
+                <p>Open terminal and run:</p>
+                <div class="code-block">sudo pacman -S flatpak</div>
+
+                <div class="completion-check">
+                    <label>
+                        <input type="checkbox" onchange="updateProgress()">
+                        I have successfully booted into Arch Linux
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 14: GRUB Configuration -->
+            <div id="step14" class="step">
+                <h2>Step 14: Add Windows to GRUB Menu</h2>
+                
+                <p>Edit GRUB configuration:</p>
+                <div class="code-block">sudo nano /etc/default/grub</div>
+
+                <ol>
+                    <li>Change <code>GRUB_TIMEOUT=5</code> to <code>GRUB_TIMEOUT=30</code></li>
+                    <li>Uncomment and set: <code>GRUB_OS_PROBER=true</code></li>
+                    <li>Save with <code>Ctrl+O</code>, exit with <code>Ctrl+X</code></li>
+                </ol>
+
+                <p>Install os-prober and update GRUB:</p>
+                <div class="code-block">sudo pacman -S os-prober</div>
+                <div class="code-block">sudo grub-mkconfig -o /boot/grub/grub.cfg</div>
+
+                <p>Reboot to see both Arch Linux and Windows 11 in GRUB menu.</p>
+
+                <div class="info">
+                    Congratulations! You now have a working Arch Linux and Windows 11 dual boot system.
+                </div>
+
+                <div class="completion-check">
+                    <label>
+                        <input type="checkbox" onchange="updateProgress()">
+                        I can boot into both Arch Linux and Windows 11
+                    </label>
+                </div>
+            </div>
+
+            <!-- Removal Guide -->
+            <div id="removal" class="step">
+                <h2>How to Remove Arch Linux (If Needed)</h2>
+                
+                <div class="warning">
+                    Only follow these steps if you want to completely remove Arch Linux and return to Windows-only boot.
+                </div>
+
+                <h3>Step 1: Boot into Windows 11</h3>
+
+                <h3>Step 2: Delete Arch Partitions</h3>
+                <ol>
+                    <li>Open Disk Management (<code>diskmgmt.msc</code>)</li>
+                    <li>Delete the Arch root partition (right-click → Delete Volume)</li>
+                    <li>The EFI partition cannot be deleted from Disk Management</li>
+                </ol>
+
+                <h3>Step 3: Remove EFI Partition via Command Prompt</h3>
+                <ol>
+                    <li>Open Command Prompt as Administrator</li>
+                    <li>Run these commands:
+                        <div class="code-block">diskpart</div>
+                        <div class="code-block">list disk</div>
+                        <div class="code-block">select disk 0</div>
+                        <div class="code-block">list partition</div>
+                    </li>
+                    <li>Identify the Arch EFI partition (~1GB, around 1000MB)</li>
+                    <li>Select and delete it:
+                        <div class="code-block">select partition X (replace X with partition number)</div>
+                        <div class="code-block">delete partition override</div>
+                        <div class="code-block">exit</div>
+                    </li>
+                </ol>
+
+                <h3>Step 4: Extend Windows Partition</h3>
+                <p>Use Disk Management to extend your Windows partition into the freed space.</p>
+
+                <h3>Step 5: Reboot</h3>
+                <p>Your system will boot directly into Windows 11 without GRUB menu.</p>
+            </div>
+
+            <div class="step-controls">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousStep()" disabled>Previous</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextStep()">Next</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
