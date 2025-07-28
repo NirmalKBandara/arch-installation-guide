@@ -3,8 +3,8 @@
 ---
 ### Safe and easy installation for Arch alongside Windows 11.
 
-- index file
-- style file
-- script file
+- [Index](index.html) file
+- [Style](style.css) file
+- [Script](script.css) file
 
 `Use YouTube, Arch wiki, AI help and my own experience to create this.`
