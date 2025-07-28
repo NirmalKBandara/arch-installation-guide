@@ -7,4 +7,4 @@
 - [Style](style.css) file
 - [Script](script.css) file
 
-`Use YouTube, Arch wiki, AI help and my own experience to create this.`
+`Used YouTube, Arch wiki, AI help and my own experience to create this.`
